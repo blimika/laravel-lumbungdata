@@ -7,6 +7,7 @@ use App\Mindikator;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\DataTmpl1Import;
 use App\DataTmpl1;
+use App\Imports\DataTmpl1BaruImport;
 use App\Mbaris;
 use App\Mbarisitems;
 use App\Mkarakteristik;
@@ -73,6 +74,7 @@ class InputTabelDinamis extends Controller
 
         //Import Data Into Database
         // Excel::import(new DataTmpl1Import($id_indikator, $tahundata), request()->file('uploaddatafile'));
+        /*
         if($administrativeLevel == 1)
         {
             Excel::import(new DataTmpl1NewImport($turunanIndikator_id , $tahundata), request()->file('uploaddatafile'));
@@ -106,7 +108,18 @@ class InputTabelDinamis extends Controller
             //Untuk Keperluan Presentasi Sementara
             //=============================================
         }
-        
+        */
+        //=============================================
+        //Untuk Keperluan Presentasi Sementara
+        //=============================================
+        Excel::import(new DataTmpl1BaruImport($turunanIndikator_id , $tahundata), request()->file('uploaddatafile'));
+            TransaksiIndikator::updateOrCreate(
+                ['id' => $turunanIndikator_id , 'tahundata' => $tahundata],
+                ['status_entri' => 1]
+            );
+        //=============================================
+        //Untuk Keperluan Presentasi Sementara
+        //=============================================
         //Get Data Parameter
         $turunanIndikator = TransaksiIndikator::where('id', $turunanIndikator_id)->where('tahundata',$tahundata)->first();
         $indId = Mindikator::where('id', $turunanIndikator->mindikator_id)->first();

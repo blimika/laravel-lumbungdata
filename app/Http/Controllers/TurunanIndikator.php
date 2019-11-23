@@ -18,6 +18,7 @@ use App\User;
 use App\AdministrativeLevel;
 use App\Mtahundata;
 use App\DataTmpl2New;
+use App\DataTmpl1;
 use App\DataTmpl1New;
 use Session;
 
@@ -49,7 +50,7 @@ class TurunanIndikator extends Controller
         if ($dataIndikator > 0) {
             
             $dataIndikator = Transaksiindikator::where('id', '=', $request->trx_id)->delete();
-
+            /*
             if ($request->level_administrasi==1) {
                 //tabel 1
                 $dataLevelAdminis = DataTmpl1New::where('turunanindikator_id','=',$request->trx_id)->delete();
@@ -58,6 +59,8 @@ class TurunanIndikator extends Controller
                 //tabel 2
                 $dataLevelAdminis = DataTmpl2New::where('turunanindikator_id','=',$request->trx_id)->delete();
             }
+            */
+            $dataLevelAdminis = DataTmpl1::where('turunanindikator_id','=',$request->trx_id)->delete();
 
             $pesan_error = "Mapping tabel berhasil di hapus";
             $warna_error = "primary";
@@ -90,6 +93,7 @@ class TurunanIndikator extends Controller
         if($isSuccessUpdateOrCreate)
         {
             //Insert Into DataTmpl1 Table if Administrative Level of Tabel equals To 1
+            /*
             if($administrativeLevel == 1)
             {
                 $turunanIndikator = Transaksiindikator::where('nama_transaksi_indikator', $namaTurunanIndikator)->where('tahundata',$tahundata)->first();
@@ -118,6 +122,17 @@ class TurunanIndikator extends Controller
 
                 $this->makeSkeleteonDataTmpl2($turunanIndikator->id, $tahundata, $max_baris, $max_karakteristik, $max_periode);
             }
+            */
+            //dijadikan satu tabel saja
+            $turunanIndikator = Transaksiindikator::where('nama_transaksi_indikator', $namaTurunanIndikator)->where('tahundata',$tahundata)->first();
+                $mindikator = Mindikator::where('id', $turunanIndikator->mindikator_id)->first();
+                $max_baris = Mbarisitems::where('mbaris_id', $mindikator->mbaris_id)->max('no_urut');
+                $max_karakteristik = Mkarakteristikitems::where('mkarakteristik_id', $mindikator->mkarakteristik_id)->max('no_urut');
+                $max_periode = Mperiodeitems::where('mperiode_id', $mindikator->mperiode_id)->max('no_urut');
+                // dd($max_baris);
+
+                $this->makeSkeleteonDataTmpl1Baru($turunanIndikator->id, $tahundata, $max_baris, $max_karakteristik, $max_periode);
+
         }
 
         $mt_indikator = TransaksiIndikator::all();
@@ -175,6 +190,28 @@ class TurunanIndikator extends Controller
                 for($periode=1; $periode <= $max_periode; $periode++)
                 {
                     DataTmpl2New::firstOrCreate(
+                        ['turunanindikator_id' => $turunanindikator_id, 
+                        'nu_baris' => $baris,
+                        'nu_karakteristik' => $karakteristik,
+                        'nu_periode' => $periode,
+                        'tahun' => $tahundata],
+                        [
+                            //No Value To Insert
+                        ]
+                    );
+                }
+            }
+        }
+    }
+    private function makeSkeleteonDataTmpl1Baru($turunanindikator_id, $tahundata, $max_baris, $max_karakteristik, $max_periode)
+    {
+        for($baris=1; $baris <= $max_baris; $baris++)
+        {
+            for($karakteristik=1; $karakteristik <= $max_karakteristik; $karakteristik++)
+            {
+                for($periode=1; $periode <= $max_periode; $periode++)
+                {
+                    DataTmpl1::firstOrCreate(
                         ['turunanindikator_id' => $turunanindikator_id, 
                         'nu_baris' => $baris,
                         'nu_karakteristik' => $karakteristik,

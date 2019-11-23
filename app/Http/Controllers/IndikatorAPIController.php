@@ -41,14 +41,14 @@ class IndikatorAPIController extends Controller
         // }
         $indikator->itemWaktu = $rsItemWaktu;
 
-        $rsItemTahun = DB::table('datatmpl1')->distinct()->where('id_indikator', $idIndikator)->limit(5)->orderBy('tahun', 'desc')->get('tahun');
+        $rsItemTahun = DB::table('datatmpl1')->distinct()->where('turunanindikator_id', $idIndikator)->limit(5)->orderBy('tahun', 'desc')->get('tahun');
         foreach ($rsItemTahun as $rsTahun) {
             $indikator->itemTahun[] = $rsTahun->tahun;
         }
 
         $rsData = DB::table('datatmpl1')->
             select('tahun','nu_karakteristik','nu_baris','nu_periode','data')->
-            where('id_indikator', $idIndikator)->get();
+            where('turunanindikator_id', $idIndikator)->get();
 
         $indikator->data = $rsData;
 

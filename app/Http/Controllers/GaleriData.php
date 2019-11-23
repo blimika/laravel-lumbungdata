@@ -14,6 +14,7 @@ use App\Msatuan;
 use App\Mindikator;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\DataTmpl1NewExport;
+use App\Exports\DataTmpl1ExportBaru;
 use App\Exports\DataTmpl2NewExport;
 
 class GaleriData extends Controller

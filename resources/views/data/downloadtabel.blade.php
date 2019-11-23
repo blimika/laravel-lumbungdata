@@ -1,13 +1,4 @@
-
-@if($madministrativelevel_id == 1)
-    @inject('data', 'App\DataTmpl1New')
-@endif
-
-@if($madministrativelevel_id == 2)
-
-    @inject('data', 'App\DataTmpl2New')
-@endif
-
+@inject('data', 'App\DataTmpl1')
 
 <table style="text-align:center" class="table table-bordered">
     <thead >
