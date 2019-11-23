@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\DataTmpl1Export;
+use App\Exports\DataTmpl1ExportBaru;
 
 class ExportData extends Controller
 {
