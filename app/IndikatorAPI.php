@@ -14,6 +14,5 @@ class IndikatorAPI
     var $itemKarakteristik = array();
     var $itemWaktu = array();
     var $itemTahun = array();
-
     var $data = array();
 }

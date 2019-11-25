@@ -19,9 +19,9 @@ class IndikatorAPIController extends Controller
             $query->where('status_tayang', '=', 1);
         })->first();
         */
-        $rsIndikator = TransaksiIndikator::where('id',$idIndikator)->first();
+        $rsIndikator = TransaksiIndikator::where('mindikator_id',$idIndikator)->first();
         $indikator->id = $rsIndikator->id;
-        $indikator->nama = $rsIndikator->nama_transaksi_indikator;
+        $indikator->nama = $rsIndikator->Mindikator->nama_indikator;
         $indikator->deskripsi = $rsIndikator->Mindikator->deskripsi_indikator;
         $indikator->keterangan = $rsIndikator->Mindikator->keterangan_indikator;
         $indikator->level_administrasi = $rsIndikator->madministrativelevel_id;
@@ -47,29 +47,31 @@ class IndikatorAPIController extends Controller
         //     $indikator->itemWaktu[$rsWaktu->no_urut] = $rsWaktu->nama_items;
         // }
         $indikator->itemWaktu = $rsItemWaktu;
+        // $rsIndikatorData = TransaksiIndikator::where([['mindikator_id',$idIndikator],['status_tayang',1]])->orderBy('tahundata','asc')->get();
         if ($rsIndikator->madministrativelevel_id==1)
         {
             //datatmpl1new
-            $rsItemTahun = DB::table('datatmpl1new')->distinct()->where('turunanindikator_id', $idIndikator)->limit(5)->orderBy('tahun', 'desc')->get('tahun');
+            $rsItemTahun = DB::table('datatmpl1new')->distinct()->where('turunanindikator_id', $rsIndikator->id)->limit(5)->orderBy('tahun', 'desc')->get('tahun');
             foreach ($rsItemTahun as $rsTahun) {
                 $indikator->itemTahun[] = $rsTahun->tahun;
             }
 
             $rsData = DB::table('datatmpl1new')->
                 select('tahun','nu_karakteristik','nu_baris','nu_periode','data')->
-                where('turunanindikator_id', $idIndikator)->get();
+                where('turunanindikator_id', $rsIndikator->id)->get();
             }
         else {
             //datatmpl2new
-            $rsItemTahun = DB::table('datatmpl2new')->distinct()->where('turunanindikator_id', $idIndikator)->limit(5)->orderBy('tahun', 'desc')->get('tahun');
-            foreach ($rsItemTahun as $rsTahun) {
-                $indikator->itemTahun[] = $rsTahun->tahun;
-            }
-
-            $rsData = DB::table('datatmpl2new')->
-                select('tahun','nu_karakteristik','nu_baris','nu_periode','data')->
-                where('turunanindikator_id', $idIndikator)->get();
             
+            $rsItemTahun = TransaksiIndikator::distinct()->where('mindikator_id', $idIndikator)->limit(5)->orderBy('tahundata', 'desc')->where('status_tayang',1)->get('tahundata'); 
+            foreach ($rsItemTahun as $rsTahun) {
+                $indikator->itemTahun[] = $rsTahun->tahundata;
+            } 
+
+            $rsData = DB::table('datatmpl2new')->leftJoin('transaksiindikator', function ($join) use($idIndikator){
+                $join->on('datatmpl2new.turunanindikator_id','=','transaksiindikator.id');
+            })->select('tahun','nu_karakteristik','nu_baris','nu_periode','data')->
+                where([['transaksiindikator.mindikator_id', $idIndikator],['status_tayang',1]])->orderBy('tahun','desc')->get();
         }        
 
         $indikator->data = $rsData;
@@ -79,16 +81,16 @@ class IndikatorAPIController extends Controller
 
     public function indikatorTerakhir(Request $request){
         $indikatorTerakhir = array();
-        /*
+        
         $rsIndikator = Mindikator::whereHas('TransaksiIndikator', function ($query){
             $query->where('status_tayang', '=', 1);
-        })->orderBy('id', 'desc')->limit(7)->get(); */
-        $rsIndikator = TransaksiIndikator::where('status_tayang',1)->orderBy('id', 'desc')->limit(9)->get();
+        })->orderBy('id', 'desc')->limit(9)->get(); 
+        //$rsIndikator = TransaksiIndikator::where('status_tayang',1)->orderBy('id', 'desc')->limit(9)->get();
         foreach ($rsIndikator as $latestIndikator) {
             $indikator = new IndikatorAPI();
             $indikator->id = $latestIndikator->id;
-            $indikator->nama = $latestIndikator->nama_transaksi_indikator;
-            $indikator->level_administrasi = $latestIndikator->madministrativelevel_id;
+            $indikator->nama = $latestIndikator->nama_indikator;
+            $indikator->level_administrasi = $latestIndikator->TransaksiIndikator->madministrativelevel_id;
 
             array_push($indikatorTerakhir, $indikator);
         }
@@ -131,20 +133,21 @@ class IndikatorAPIController extends Controller
 
         $indikatorTerakhir = array();
 
-        /*
+        
         $rsIndikator = Mindikator::where('msubjek_id', $idSubjek)->whereHas('TransaksiIndikator', function ($query){
             $query->where('status_tayang', '=', 1);
         })->orderBy('created_at', 'desc')->get(); 
-        */
+        
+        /*
         $rsIndikator = TransaksiIndikator::where('status_tayang',1)->whereHas('Mindikator',function ($query) use($idSubjek){
             $query->where('msubjek_id',$idSubjek);
-        })->orderBy('created_at', 'desc')->get();
+        })->orderBy('created_at', 'desc')->get(); */
         foreach ($rsIndikator as $latestIndikator) {
             $indikator = new IndikatorAPI();
             $indikator->id = $latestIndikator->id;
-            $indikator->nama = $latestIndikator->nama_transaksi_indikator .' Tahun '. $latestIndikator->tahundata;
-            $indikator->satuan = $latestIndikator->Mindikator->Msatuan->nama_satuan;
-            $indikator->level_administrasi = $latestIndikator->madministrativelevel_id;
+            $indikator->nama = $latestIndikator->nama_indikator;
+            $indikator->satuan = $latestIndikator->Msatuan->nama_satuan;
+            $indikator->level_administrasi = $latestIndikator->TransaksiIndikator->madministrativelevel_id;
             array_push($indikatorTerakhir, $indikator);
         }
 
