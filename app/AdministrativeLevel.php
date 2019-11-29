@@ -8,5 +8,5 @@ class AdministrativeLevel extends Model
 {
     protected $table = "madministrativelevel";
     protected $fillable = ["nama_administrativelevel"];
-    public $timestamps = false;
+    // public $timestamps = false;
 }

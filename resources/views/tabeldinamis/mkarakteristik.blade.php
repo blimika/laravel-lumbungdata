@@ -16,6 +16,7 @@
 <!-- Responsive examples -->
 <script src="{{ asset('plugins/datatables/dataTables.responsive.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables/dataTables.buttons.min.js') }}"></script>
 
 <!-- Datatable init js -->
 <script src="{{ asset('assets/pages/datatables.init.js') }}"></script>  
@@ -58,8 +59,8 @@
                             <td>{{ $karakteristik->nama_karakteristik }}</td>
                             <td> 
                                 <button class="btn btn-success" data-toggle="modal" data-target="#tambahKarakteristikModal">Tambah</button>
-                                <button class="btn btn-primary">Edit</button>
-                                <button class="btn btn-danger">Hapus</button>
+                                <a class="btn btn-primary" href="{{route('tabeldinamis.getKarakteristikForEdit', $karakteristik->id)}}">Edit</a>
+                                <a class="btn btn-danger" href="{{route('tabeldinamis.hapusKarakteristik', $karakteristik->id)}}">Hapus</a>
                                 <!--<a href="" class="btn btn-info" data-toggle="modal" data-target="#itemKaViewModal" data-mkarid="{{ $karakteristik->id }}">View</a>-->
                             </td>
                         </tr>
@@ -125,6 +126,63 @@
       <!-- <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
       </div> -->
+
+    </div>
+  </div>
+</div>
+
+<!-- The Modal -->
+<div class="modal fade" id="editKarakteristikModal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Karakteristik</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form id="editKarakteristikForm" action="#" method="post" enctype="multipart/form-data">
+        @csrf
+            <div class="form-group">
+                <label for="editKarakteristikIDKarakteristik">ID Karakteristik</label>
+                <input type="text" class="form-control" id="editKarakteristikIDKarakteristik" name="editKarakteristikIDKarakteristik" />
+            </div>
+
+            <div class="form-group">
+                <label for="editKarakteristikNamaKarakteristik">Karakteristik</label>
+                <input type="text" class="form-control" id="editKarakteristikNamaKarakteristik" name="editKarakteristikNamaKarakteristik" />
+            </div>
+
+            <div class="form-group">
+
+            </div>
+
+            <div class="form-group">
+                <label for="editItemsKarakteristik">Items Karakteristik</label>
+                <div class="form-group">
+                    <!-- apabila link "Add" diklik maka akan menjalankan function tambah_form -->
+                    <a href='#' onclick="tambah_form(); return false;" class="btn btn-success">Add Items</a>
+                    <!-- apabila link "Remove" diklik maka akan menjalankan function kurangi_form -->
+                    <a href='#' onclick="kurangi_form(); return false;" class="btn btn-danger">Remove Items</a>
+                </div>
+                <table id="editItemsKarakteristik">
+                    <tr>
+                        <td>
+                            <input type="text" name="edititemskarakteristik[]"  class="form-control">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+
+        </form>
+      </div>
 
     </div>
   </div>

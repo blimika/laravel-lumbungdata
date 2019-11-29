@@ -21,7 +21,7 @@ class IndikatorAPIController extends Controller
         */
         $rsIndikator = TransaksiIndikator::where('id',$idIndikator)->first();
         $indikator->id = $rsIndikator->id;
-        $indikator->nama = $rsIndikator->nama_transaksi_indikator;
+        $indikator->nama = $rsIndikator->nama_transaksi_indikator .' Tahun '. $rsIndikator->tahundata;
         $indikator->deskripsi = $rsIndikator->Mindikator->deskripsi_indikator;
         $indikator->keterangan = $rsIndikator->Mindikator->keterangan_indikator;
         $indikator->level_administrasi = $rsIndikator->madministrativelevel_id;
@@ -87,7 +87,7 @@ class IndikatorAPIController extends Controller
         foreach ($rsIndikator as $latestIndikator) {
             $indikator = new IndikatorAPI();
             $indikator->id = $latestIndikator->id;
-            $indikator->nama = $latestIndikator->nama_transaksi_indikator;
+            $indikator->nama = $latestIndikator->nama_transaksi_indikator .' Tahun '. $latestIndikator->tahundata;
             $indikator->level_administrasi = $latestIndikator->madministrativelevel_id;
 
             array_push($indikatorTerakhir, $indikator);

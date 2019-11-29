@@ -8,5 +8,5 @@ class Mtahundata extends Model
 {
     protected $table = "mtahundata";
     protected $fillable = ["id"];
-    public $timestamps = false;
+    // public $timestamps = false;
 }
