@@ -8,7 +8,7 @@ class Mperiode extends Model
 {
     protected $table = 'mperiodewaktu';
     protected $fillable = ["nama_periode"];
-    public $timestamps = false;
+    // public $timestamps = false;
 
     public function Mperiodeitems()
     {

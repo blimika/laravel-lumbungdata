@@ -8,5 +8,5 @@ class Msubjek extends Model
 {
    protected $table = "msubjek";
    protected $fillable = ["nama_subjek"];
-   public $timestamps = false;
+   // public $timestamps = false;
 }

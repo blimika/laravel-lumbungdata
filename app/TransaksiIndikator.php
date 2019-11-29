@@ -8,7 +8,7 @@ class TransaksiIndikator extends Model
 {
     protected $table = "transaksiindikator";
     protected $fillable = ["nama_transaksi_indikator", "mindikator_id", "user_id", "tahundata", "madministrativelevel_id", "status_entri", "status_tayang"];
-    public $timestamps = false;
+    // public $timestamps = false;
 
     public function Mindikator()
     {

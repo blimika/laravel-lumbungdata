@@ -23,18 +23,18 @@
         <div class="card m-b-30">
             <div class="card-body">
 
-                <h4 class="mt-0 header-title">Edit Master Subjek</h4><br/>
+                <h4 class="mt-0 header-title">Edit Master Satuan</h4><br/>
 
-                <form action="{{route('tabeldinamis.editSubjek')}}" method="post" enctype="multipart/form-data">
+                <form action="{{route('tabeldinamis.editSatuan')}}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <label for="msubjek_id"></label>
-                        <input type="text" class="form-control" id="msubjek_id" name="msubjek_id" value="{{$subjek->id}}" readOnly/>
+                        <label for="msatuan_id"></label>
+                        <input type="text" class="form-control" id="msatuan_id" name="msatuan_id" value="{{$satuan->id}}" readOnly/>
                     </div>
 
                     <div class="form-group">
-                        <label for="msubjek_nama_subjek"></label>
-                        <input type="text" class="form-control" id="msubjek_nama_subjek" name="msubjek_nama_subjek" value="{{$subjek->nama_subjek}}" />
+                        <label for="msatuan_nama_satuan"></label>
+                        <input type="text" class="form-control" id="msatuan_nama_satuan" name="msatuan_nama_satuan" value="{{$satuan->nama_satuan}}" />
                     </div>
 
                     <div class="form-group">

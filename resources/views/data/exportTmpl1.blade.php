@@ -29,6 +29,8 @@
     </thead>
     <tbody>
             @php
+            $vData = "";
+            $tData = "";
             for($b=0; $b < $max_baris; $b++)
             {
                 echo '<tr>';
@@ -38,12 +40,22 @@
                 {
                     for($p=0; $p < $max_periode; $p++)
                     {
-                        echo '<td>'.$data->where("id_indikator",1)
+                        $tData  = $data->where("turunanindikator_id", $id_indikator)
+                                        ->where("tahun", $tahun)
                                         ->where("nu_baris", $b+1)
                                         ->where("nu_karakteristik", $k+1)
                                         ->where("nu_periode", $p+1)
                                         ->select("data")
-                                        ->first()->data.'</td>';
+                                        ->first();
+                                            
+                        if($tData == null)
+                        {
+                            $vData = "N/A";
+                        }else{
+                            $vData = $tData->data;
+                        }
+
+                        echo '<td>'.$vData.'</td>';
                     }
                 }
                 echo '</tr>';

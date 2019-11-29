@@ -15,6 +15,7 @@
 <!-- Responsive examples -->
 <script src="{{ asset('plugins/datatables/dataTables.responsive.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables/dataTables.buttons.min.js') }}"></script>
 
 <!-- Datatable init js -->
 <script src="{{ asset('assets/pages/datatables.init.js') }}"></script>  
@@ -56,8 +57,8 @@
                             <td>{{ $satuan->nama_satuan }}</td>
                             <td> 
                                 <button class="btn btn-success" data-toggle="modal" data-target="#tambahSatuanModal">Tambah</button>
-                                <button class="btn btn-primary">Edit</button>
-                                <button class="btn btn-danger">Hapus</button>
+                                <a class="btn btn-primary" href="{{route('tabeldinamis.getSatuanForEdit', $satuan->id)}}" >Edit</a>
+                                <a class="btn btn-danger" href="{{route('tabeldinamis.hapusSatuan', $satuan->id)}}">Hapus</a>
                             </td>
                         </tr>
                     @endforeach
