@@ -17,6 +17,7 @@ use App\Msatuan;
 use App\TransaksiIndikator;
 use App\Imports\DataTmpl2NewImport;
 use App\Imports\DataTmpl1NewImport;
+use App\Msubjek;
 
 class InputTabelDinamis extends Controller
 {
@@ -25,15 +26,22 @@ class InputTabelDinamis extends Controller
         // $mindikator = Mindikator::all();
         // return view('tabeldinamis.listindikator', ['mindikator' => $mindikator]);
         $turunanIndikator;
-
+        
         if(Auth()->user()->IsSuperAdmin())
         {
-            $turunanIndikator = Transaksiindikator::all();
-        }else{
-            $turunanIndikator = Transaksiindikator::where('user_id' , Auth()->user()->id)->get();
+            $turunanIndikator = Transaksiindikator::leftJoin('mindikator','mindikator.id','=','transaksiindikator.mindikator_id')->when(request('msubjek'),function($query){
+                return $query->where('mindikator.msubjek_id',request('msubjek'));
+            })->select('transaksiindikator.*')->get();
         }
-
-        return view('tabeldinamis.listindikator', ['turunanIndikator' => $turunanIndikator]);
+        else
+        {
+            $turunanIndikator = Transaksiindikator::leftJoin('mindikator','mindikator.id','=','transaksiindikator.mindikator_id')->when(request('msubjek'),function($query){
+                return $query->where('mindikator.msubjek_id',request('msubjek'));
+            })->where('user_id' , Auth()->user()->id)->select('transaksiindikator.*')->get();
+        }
+        //dd($turunanIndikator);
+        $data_subjek = Msubjek::get();
+        return view('tabeldinamis.listindikator', ['turunanIndikator'=>$turunanIndikator,'dataSubjek'=>$data_subjek]);
     }
 
     public function getDataIndikator($id)

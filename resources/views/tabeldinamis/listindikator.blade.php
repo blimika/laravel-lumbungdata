@@ -39,7 +39,7 @@
     <div class="col-12">
         <div class="card m-b-30">
             <div class="card-body">
-
+                @include('tabeldinamis.filterindikator')
                 <h4 class="mt-0 header-title">Pilih Indikator</h4><br/>
 
                 <table id="datatable" class="table table-bordered dt-responsive" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
