@@ -48,7 +48,7 @@ $(document).ready(function() {
 
                     <div class="form-group">
                         <label for="editIndikatorNamaIndikator">Indikator</label>
-                        <input type="text" class="form-control" id="editIndikatorNamaIndikator" name="editIndikatorNamaIndikator" value="{{$ind->nama_indikator}}" readOnly />
+                        <input type="text" class="form-control" id="editIndikatorNamaIndikator" name="editIndikatorNamaIndikator" value="{{$ind->nama_indikator}}" />
                     </div>
 
                     <div class="form-group">

@@ -235,7 +235,7 @@ class TabelDinamis extends Controller
         $mbaris_id = $request->editIndikatorBaris;
         $mperiode_id = $request->editIndikatorPeriode;
         $msatuan_id = $request->editIndikatorSatuan;
-
+        //update
         $isInsertSuccess = Mindikator::updateOrCreate(
             ['id' => $id_indikator],
             ['msubjek_id' => $msubjek_id , 
@@ -246,7 +246,21 @@ class TabelDinamis extends Controller
             'msatuan_id' => $msatuan_id,
             ]
         );
-
+        //cek transaksiIndikator
+        $count_transaksiindikator = TransaksiIndikator::where('mindikator_id',$id_indikator)->count();
+        if ($count_transaksiindikator > 0)
+        {
+            $dataall = TransaksiIndikator::where('mindikator_id',$id_indikator)->get();
+            foreach ($dataall as $item)
+            {
+                $data = TransaksiIndikator::where('id',$item->id)->first();
+                $data->nama_transaksi_indikator = $nama_indikator;
+                $data->update();
+            }
+            
+        }
+        return redirect()->route('tabeldinamis.mindikator');
+        /*
         $msubjek = Msubjek::all();
         $mindikator = Mindikator::all();
         $mkarakteristik = Mkarakteristik::all();
@@ -254,6 +268,7 @@ class TabelDinamis extends Controller
         $mperiode = Mperiode::all();
         $msatuan = Msatuan::all();
 
+        
         return redirect()->route('tabeldinamis.mindikator', 
         [
             'msubjek' => $msubjek,
@@ -263,6 +278,7 @@ class TabelDinamis extends Controller
             'mperiode' => $mperiode,
             'msatuan' => $msatuan,
         ]);
+        */
     }
 
     public function addKarakteristik(Request $request)
